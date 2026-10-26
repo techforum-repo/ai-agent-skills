@@ -1,0 +1,33 @@
+# === System Files ===
+.DS_Store
+Thumbs.db
+*.log
+
+# === Local Runtime & OS Caches ===
+.claude/
+.codex/
+.agents/
+! .agents/plugins/marketplace.json
+
+# === IDEs and Editors ===
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# === Local Secrets / Environment Configuration ===
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# === NodeJS / Tooling (If utilizing validation packages) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
