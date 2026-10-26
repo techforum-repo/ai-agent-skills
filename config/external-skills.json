@@ -2,13 +2,8 @@
   "external_skills": [
     {
       "name": "ext-skill-creator",
-      "repo": "anthropics/skills/skill-creator",
-      "ref": "main"
-    },
-    {
-      "name": "ext-code-simplifier",
-      "repo": "anthropics/claude-plugins-official/code-simplifier",
-      "ref": "main"
+      "repo": "anthropics/skills/skills/skill-creator",
+      "ref": "dbd4588f9e1033efb41dad4bef2f7947c8993d44"
     }
   ]
 }

@@ -22,11 +22,17 @@ if (Test-Path $ManifestFile) {
         
         Write-Host " 📥 Fetching external skill: $Name ($Repo#$Ref)..." -ForegroundColor Yellow
         
-        # Force fresh clean downloads to catch manifest updates cleanly
+        # Only replace folders created by this installer; preserve local work.
+        $Marker = Join-Path $TargetDir ".ai-agent-skills-managed"
+        if ((Test-Path $TargetDir) -and !(Test-Path $Marker)) {
+            Write-Warning "Skipping $Name: $TargetDir exists and is not managed by this repository."
+            continue
+        }
         if (Test-Path $TargetDir) { Remove-Item $TargetDir -Recurse -Force }
         
         # Execute npx degit through PowerShell environment variables
         npx --yes degit "$Repo#$Ref" $TargetDir --force | Out-Null
+        New-Item -ItemType File -Path $Marker -Force | Out-Null
     }
 }
 
@@ -43,9 +49,17 @@ Get-ChildItem $RepoSkillsDir | Where-Object { $_.PSIsContainer } | ForEach-Objec
     $ClaudeLink = Join-Path $ClaudeTarget $SkillName
     $CodexLink = Join-Path $CodexTarget $SkillName
     
-    # Remove existing symlinks or legacy cached folders to prevent file collisions
-    if (Test-Path $ClaudeLink) { Remove-Item $ClaudeLink -Recurse -Force }
-    if (Test-Path $CodexLink) { Remove-Item $CodexLink -Recurse -Force }
+    # Never replace a directory or a link owned by another tool/user.
+    if ((Test-Path $ClaudeLink) -and !((Get-Item $ClaudeLink -Force).LinkType)) {
+        Write-Warning "Skipping $SkillName: $ClaudeLink is not a managed symbolic link."
+        return
+    }
+    if ((Test-Path $CodexLink) -and !((Get-Item $CodexLink -Force).LinkType)) {
+        Write-Warning "Skipping $SkillName: $CodexLink is not a managed symbolic link."
+        return
+    }
+    if (Test-Path $ClaudeLink) { Remove-Item $ClaudeLink -Force }
+    if (Test-Path $CodexLink) { Remove-Item $CodexLink -Force }
     
     # Create the native Windows Symbolic Links for both execution environments
     New-Item -ItemType SymbolicLink -Path $ClaudeLink -Value $SourcePath | Out-Null

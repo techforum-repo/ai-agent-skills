@@ -22,9 +22,15 @@ if [ -f "$MANIFEST_FILE" ]; then
         TARGET_DIR="$REPO_SKILLS_DIR/$name"
         
         echo " 📥 Fetching external skill: $name ($repo#$ref)..."
-        # Force fresh clean downloads to catch updates cleanly
+        # Only replace skill folders managed by this repository. A marker makes
+        # ownership explicit and prevents an accidental deletion of local work.
+        if [ -e "$TARGET_DIR" ] && [ ! -f "$TARGET_DIR/.ai-agent-skills-managed" ]; then
+            echo "Skipping $name: $TARGET_DIR exists and is not managed by this repository."
+            continue
+        fi
         rm -rf "$TARGET_DIR"
         npx --yes degit "$repo#$ref" "$TARGET_DIR" --force
+        touch "$TARGET_DIR/.ai-agent-skills-managed"
     done
 fi
 
@@ -38,8 +44,15 @@ for skill_folder in "$REPO_SKILLS_DIR"/*; do
     if [ -d "$skill_folder" ]; then
         SKILL_NAME=$(basename "$skill_folder")
         
-        rm -rf "$CLAUDE_TARGET/$SKILL_NAME"
-        rm -rf "$CODEX_TARGET/$SKILL_NAME"
+        for target in "$CLAUDE_TARGET/$SKILL_NAME" "$CODEX_TARGET/$SKILL_NAME"; do
+            if [ -e "$target" ] && [ ! -L "$target" ]; then
+                echo "Skipping $target: it is not a symlink managed by this installer."
+                continue 2
+            fi
+        done
+
+        rm -f "$CLAUDE_TARGET/$SKILL_NAME"
+        rm -f "$CODEX_TARGET/$SKILL_NAME"
 
         ln -sf "$skill_folder" "$CLAUDE_TARGET/$SKILL_NAME"
         ln -sf "$skill_folder" "$CODEX_TARGET/$SKILL_NAME"
