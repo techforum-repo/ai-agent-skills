@@ -1,15 +1,16 @@
-# Get absolute path of the local cloned skills folder
+# Get absolute path of the local repository skills directory folder
 $RepoSkillsDir = Resolve-Path "$PSScriptRoot\..\skills"
 
 $ClaudeTarget = "$env:USERPROFILE\.claude\skills"
 $CodexTarget = "$env:USERPROFILE\.codex\skills"
 
-# Force establish target paths if they don't exist
+# Force establish target system environment paths if they don't exist
 If (!(Test-Path $ClaudeTarget)) { New-Item -ItemType Directory -Path $ClaudeTarget -Force }
 If (!(Test-Path $CodexTarget)) { New-Item -ItemType Directory -Path $CodexTarget -Force }
 
-Write-Host "Creating Windows Fs Symbolic Links..." -ForegroundColor Cyan
+Write-Host "Syncing All Custom & External Skills to AI Platforms..." -ForegroundColor Cyan
 
+# Dynamically loops through every folder inside your repository skills folder
 Get-ChildItem $RepoSkillsDir | Where-Object { $_.PSIsContainer } | ForEach-Object {
     $SkillName = $_.Name
     $SourcePath = $_.FullName
@@ -17,14 +18,14 @@ Get-ChildItem $RepoSkillsDir | Where-Object { $_.PSIsContainer } | ForEach-Objec
     $ClaudeLink = Join-Path $ClaudeTarget $SkillName
     $CodexLink = Join-Path $CodexTarget $SkillName
     
-    # Remove existing symlinks or legacy files if refreshing profiles
+    # Remove existing symlinks or legacy cached folders to prevent file collisions
     if (Test-Path $ClaudeLink) { Remove-Item $ClaudeLink -Recurse -Force }
     if (Test-Path $CodexLink) { Remove-Item $CodexLink -Recurse -Force }
     
-    # Create the native Windows Symlink junctions
+    # Create the native Windows Symbolic Links for both execution environments
     New-Item -ItemType SymbolicLink -Path $ClaudeLink -Value $SourcePath | Out-Null
     New-Item -ItemType SymbolicLink -Path $CodexLink -Value $SourcePath | Out-Null
     
-    Write-Host " ✓ Linked Windows Engine Target: $SkillName" -ForegroundColor Green
+    Write-Host " ✓ Registered Windows Link: $SkillName" -ForegroundColor Green
 }
-Write-Host "Windows Link Sync Complete!" -ForegroundColor Cyan
+Write-Host "Windows AI Platform Sync Complete!" -ForegroundColor Cyan
