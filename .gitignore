@@ -3,31 +3,26 @@
 Thumbs.db
 *.log
 
-# === Local Runtime & OS Caches ===
+# === Local AI Runtime Caches ===
 .claude/
 .codex/
 .agents/
 ! .agents/plugins/marketplace.json
 
-# === IDEs and Editors ===
+# === Third-Party External Skills (Automated Wildcard) ===
+# Automatically ignores any external skill prefixed with "ext-" 
+skills/ext-*
+
+# === IDEs and Text Editors ===
 .vscode/
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.swp
+*.bak
 
-# === Local Secrets / Environment Configuration ===
+# === Local Secrets / Environment Configurations ===
 .env
 .env.local
 .env.*.local
 *.pem
 *.key
-
-# === NodeJS / Tooling (If utilizing validation packages) ===
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+*.token
