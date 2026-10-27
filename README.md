@@ -2,6 +2,14 @@
 
 Central hub to maintain, update, and track unified custom skills for Claude Code and Codex across Windows, Mac, and Linux environments.
 
+## Use it as your own skills hub
+
+This repository is a framework: fork it (or use it as a template), then replace the contents of `skills/` with your own skills. The sync scripts, validator and CI work unchanged.
+
+- `skills/` — skills installed for both **Claude Code** (`~/.claude/skills`) and **Codex** (`~/.codex/skills`). Use only frontmatter both understand (`name`, `description`, and optionally `allowed-tools`), and keep tool-specific instructions out of the body.
+- `templates/` — starter skills to copy from; not installed.
+- `config/external-skills.json` — third-party skills pinned to a commit.
+
 ## Local Machine Workstation Setup
 
 The sync scripts register repository skills in Claude Code and Codex using symbolic links. They only replace links that they previously created; an existing directory is treated as user-owned and is left untouched.
@@ -41,4 +49,4 @@ Claude plugins are not automatically registered as skills. Install them through 
 
 Use the `SKILL.md` format for portable skills. Tool-specific configuration—such as Claude Code rules, hooks, commands, or GitHub Copilot instruction files—belongs in its owning tool repository rather than this shared skill hub.
 
-`skills/python-helper-example/` demonstrates the preferred structure for a portable skill that includes a small Python helper. It is read-only and can be copied as a starting point when deterministic validation or transformation is warranted.
+`templates/python-helper-example/` demonstrates the preferred structure for a portable skill that includes a small Python helper. It is read-only and can be copied into `skills/` as a starting point when deterministic validation or transformation is warranted. Templates live outside `skills/` so they are not installed: every installed skill's description is loaded into each agent session, and an example skill would add noise and could trigger on unrelated tasks.

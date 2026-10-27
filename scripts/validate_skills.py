@@ -57,9 +57,12 @@ def validate(skill_dir: Path) -> list[str]:
 
 
 def main() -> int:
-    skills_root = Path(__file__).resolve().parent.parent / "skills"
+    repo_root = Path(__file__).resolve().parent.parent
     failed = False
-    for skill_dir in sorted(p for p in skills_root.iterdir() if p.is_dir()):
+    # templates/ holds starter skills that are not installed but must stay valid to copy.
+    skill_dirs = [p for root in ("skills", "templates") if (repo_root / root).is_dir()
+                  for p in (repo_root / root).iterdir() if p.is_dir()]
+    for skill_dir in sorted(skill_dirs):
         # External skills are validated upstream and are not committed here.
         if skill_dir.name.startswith("ext-"):
             continue
