@@ -6,8 +6,12 @@ Thumbs.db
 # === Local AI Runtime Caches ===
 .claude/
 .codex/
-.agents/
-! .agents/plugins/marketplace.json
+# Ignore .agents/ except the plugin marketplace manifest. Git cannot re-include a file
+# inside an ignored directory, so each parent level is un-ignored explicitly.
+.agents/*
+!.agents/plugins/
+.agents/plugins/*
+!.agents/plugins/marketplace.json
 
 # === Third-Party External Skills (Automated Wildcard) ===
 # Automatically ignores any external skill prefixed with "ext-" 

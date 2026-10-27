@@ -10,20 +10,26 @@ The sync scripts register repository skills in Claude Code and Codex using symbo
 Make the setup script executable and run it:
 ```bash
 chmod +x scripts/sync-skills.sh
-./scripts/sync-skills.sh
+./scripts/sync-skills.sh            # add --dry-run to preview changes
 ```
 
+Links whose skill folder no longer exists in this repository (a renamed or deleted skill) are pruned automatically.
+
 ### For Native Windows (PowerShell Host)
-Open PowerShell as an Administrator and execute:
+Symbolic links need an Administrator shell or Windows Developer Mode. Open PowerShell and execute:
 ```powershell
 Set-ExecutionPolicy RemoteSigned -Scope Process
-.\scripts\sync-skills.ps1
+.\scripts\sync-skills.ps1           # add -DryRun to preview changes
 ```
 
 ## Adding New Skills
 1. Create a new folder inside `skills/` (e.g., `skills/my-new-skill/`).
 2. Add a `SKILL.md` inside it containing accurate YAML frontmatter configurations.
-3. Rerun the synchronization script to instantly map it to your active CLI frameworks.
+   - `name` must be lowercase with hyphens and match the folder name.
+   - `description` must say what the skill does **and when to use it** (max 1024 characters); agents decide whether to load a skill from this text alone.
+   - Use `allowed-tools` (hyphen), not `allowed_tools`.
+3. Run `python3 scripts/validate_skills.py` to check the frontmatter. CI runs the same check on every push.
+4. Rerun the synchronization script to instantly map it to your active CLI frameworks.
 
 ## External skills
 
