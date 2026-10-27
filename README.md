@@ -50,3 +50,7 @@ Claude plugins are not automatically registered as skills. Install them through 
 Use the `SKILL.md` format for portable skills. Tool-specific configuration—such as Claude Code rules, hooks, commands, or GitHub Copilot instruction files—belongs in its owning tool repository rather than this shared skill hub.
 
 `templates/python-helper-example/` demonstrates the preferred structure for a portable skill that includes a small Python helper. It is read-only and can be copied into `skills/` as a starting point when deterministic validation or transformation is warranted. Templates live outside `skills/` so they are not installed: every installed skill's description is loaded into each agent session, and an example skill would add noise and could trigger on unrelated tasks.
+
+## License
+
+[MIT](LICENSE)
