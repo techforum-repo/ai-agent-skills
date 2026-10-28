@@ -1,5 +1,7 @@
 # Custom Shared AI Agent Skills
 
+[![CI](https://github.com/techforum-repo/ai-agent-skills/actions/workflows/validate.yml/badge.svg)](https://github.com/techforum-repo/ai-agent-skills/actions/workflows/validate.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Central hub to maintain, update, and track unified custom skills for Claude Code and Codex across Windows, Mac, and Linux environments.
 
 ## Use it as your own skills hub
